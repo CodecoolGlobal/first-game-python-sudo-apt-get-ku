@@ -26,7 +26,6 @@ def main():
         board[p//9][p%9] = 0
     numSize = 1
     empty_board = copy.deepcopy(board)
-    print(empty_board)
     print_sudoku(board)
     
     while True:
