@@ -1,11 +1,11 @@
 from random import sample
-from colorama import Fore, Style
+from colorama import Fore
 import os
 import time
 import copy
 
-def main():
 
+def main():
     difficulty = input(Fore.BLUE + "Choose difficulty (easy, medium, hard, extreme): ")
     print(Fore.WHITE)
     if difficulty == "easy":
@@ -19,20 +19,23 @@ def main():
 
     board = fill_grid()
     full_board = copy.deepcopy(board)
-    
+
     squares = 9*9
     empties = squares * 1//dif_num
-    for p in sample(range(squares),empties):
-        board[p//9][p%9] = 0
-    numSize = 1
+    for p in sample(range(squares), empties):
+        board[p // 9][p % 9] = 0
     empty_board = copy.deepcopy(board)
-    
     print_sudoku(board)
-    
+
     play(board, full_board)
 
-#Control
+
 def play(board, full_board):
+    """
+    Control over the board
+    """
+    coordinates = []
+
     while True:
         try:
             row = int(input("Enter the number of the row: "))
@@ -43,27 +46,34 @@ def play(board, full_board):
             continue
         if board[row-1][column-1] == 0:
             board[row-1][column-1] = num
-        else:
-            print("You can't touch this!")
-            time.sleep(3)
+            coordinates.append((row, column))
+        elif board[row-1][column-1] != 0:
+            if (row, column) in coordinates:
+                board[row-1][column-1] = num
+            else:
+                print("You can't touch this!")
+                time.sleep(3)
         print_sudoku(board)
-        if check_full(board) == True:
+        if check_full(board) is True:
             user_ans = input("Would you like to check your board? (y/n): ")
             if "y" in user_ans:
-                win_lose(board,full_board)
+                win_lose(board, full_board)
             else:
                 print_sudoku(board)
                 continue
             break
         continue
-        
-#Formating
+
+
 def print_sudoku(tbl):
+    """
+    Formating the nested list into a proper board
+    """
     os.system('clear')
-    print (f"{0}| {1} | {2} | {3} | {4} | {5} | {6} | {7} | {8} | {9} |")
+    print(f"{0}| {1} | {2} | {3} | {4} | {5} | {6} | {7} | {8} | {9} |")
     print("-"*38)
     for i, row in enumerate(tbl):
-        print(("{}".format(i+1)) + ("|" + " {}   {}   {} |"*3).format(*[x if x != 0  else Fore.MAGENTA + "#" + Fore.WHITE  for x in row]))
+        print(("{}".format(i+1)) + ("|" + " {}   {}   {} |"*3).format(*[x if x != 0 else Fore.YELLOW + "#" + Fore.WHITE for x in row]))
         if i == 8:
             print("-"*38)
         elif i % 3 == 2:
@@ -71,8 +81,11 @@ def print_sudoku(tbl):
         else:
             print(" " "|" + "   +"*8 + "   |")
 
-# Cheking for remaning holes in the table
+
 def check_full(board):
+    """
+    Cheking for remaning holes in the table
+    """
     full = True
     for row in board:
         for element in row:
@@ -80,45 +93,51 @@ def check_full(board):
                 full = False
     return full
 
-#Determine win condition
-def win_lose (board, full_board):
+
+def win_lose(board, full_board):
+    """
+    Determine win condition
+    """
     win = False
     if full_board == board:
         win = True
         print(Fore.GREEN + "Congratulations! You solved the puzzle!")
     else:
-    #Showing the good solution if the sudoku has wrong numbers
+        # Showing the good solution if the sudoku has wrong numbers
         print(Fore.RED + "You've got some of the numbers wrong, check them again!")
         print(Fore.GREEN + "Right board is: " "\n")
         time.sleep(2)
         print_sudoku(full_board)
     return win
 
-#Creating and filling the empty grid
+
 def fill_grid():
+    """
+    Creating and filling the empty grid
+    """
     board = []
-    board.append([0,0,0,0,0,0,0,0,0,0])
-    board.append([0,0,0,0,0,0,0,0,0,0])
-    board.append([0,0,0,0,0,0,0,0,0,0])
-    board.append([0,0,0,0,0,0,0,0,0,0])
-    board.append([0,0,0,0,0,0,0,0,0,0])
-    board.append([0,0,0,0,0,0,0,0,0,0])
-    board.append([0,0,0,0,0,0,0,0,0,0])
-    board.append([0,0,0,0,0,0,0,0,0,0])
-    board.append([0,0,0,0,0,0,0,0,0,0])
+    board.append([0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+    board.append([0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+    board.append([0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+    board.append([0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+    board.append([0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+    board.append([0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+    board.append([0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+    board.append([0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+    board.append([0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
     rows = []
     cols = []
 
-    base  = 3 
-    side  = base*base
-    nums  = sample(range(1,side+1),side) # random numbers
+    base = 3
+    side = base*base
+    nums = sample(range(1, side+1), side)  # random numbers
 
     for g in sample(range(base), base):
-        for r in sample(range(g*base,(g+1)*base), base):
+        for r in sample(range(g*base, (g+1)*base), base):
             rows.append(r)
 
     for g in sample(range(base), base):
-        for c in sample(range(g*base,(g+1)*base), base):
+        for c in sample(range(g*base, (g+1)*base), base):
             cols.append(c)
 
     for r in range(side):
@@ -127,7 +146,6 @@ def fill_grid():
 
     board = [[board[r][c] for c in cols] for r in rows]
     return board
-
 
 
 main()
