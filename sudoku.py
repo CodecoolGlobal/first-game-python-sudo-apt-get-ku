@@ -26,8 +26,13 @@ def main():
         board[p//9][p%9] = 0
     numSize = 1
     empty_board = copy.deepcopy(board)
+    
     print_sudoku(board)
     
+    play(board, full_board)
+
+#Control
+def play(board, full_board):
     while True:
         try:
             row = int(input("Enter the number of the row: "))
@@ -54,7 +59,7 @@ def main():
         
 #Formating
 def print_sudoku(tbl):
-   # os.system('clear')
+    os.system('clear')
     print (f"{0}| {1} | {2} | {3} | {4} | {5} | {6} | {7} | {8} | {9} |")
     print("-"*38)
     for i, row in enumerate(tbl):
@@ -89,7 +94,7 @@ def win_lose (board, full_board):
         print_sudoku(full_board)
     return win
 
-
+#Creating and filling the empty grid
 def fill_grid():
     board = []
     board.append([0,0,0,0,0,0,0,0,0,0])
