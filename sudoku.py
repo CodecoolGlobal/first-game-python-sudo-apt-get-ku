@@ -5,7 +5,11 @@ import time
 import copy
 
 
-def main():
+def choose_difficulty():
+
+    '''
+    Changing the game's difficulty
+    '''
     difficulty = input(Fore.BLUE + "Choose difficulty (easy, medium, hard, extreme): ")
     print(Fore.WHITE)
     if difficulty == "easy":
@@ -16,18 +20,7 @@ def main():
         dif_num = 8
     else:
         dif_num = 4
-
-    board = fill_grid()
-    full_board = copy.deepcopy(board)
-
-    squares = 9*9
-    empties = squares * 1//dif_num
-    for p in sample(range(squares), empties):
-        board[p // 9][p % 9] = 0
-    empty_board = copy.deepcopy(board)
-    print_sudoku(board)
-
-    play(board, full_board)
+    return dif_num
 
 
 def play(board, full_board):
@@ -111,7 +104,7 @@ def win_lose(board, full_board):
     return win
 
 
-def fill_grid():
+def fill_grid(dif_num):
     """
     Creating and filling the empty grid
     """
@@ -145,7 +138,24 @@ def fill_grid():
             board[r][c] = nums[(base * (r % base) + r // base + c) % side]
 
     board = [[board[r][c] for c in cols] for r in rows]
+
+    squares = 9*9
+    empties = squares * 1//dif_num
+    for p in sample(range(squares), empties):
+        board[p // 9][p % 9] = 0
+    print_sudoku(board)
+
     return board
 
 
-main()
+def main():
+    dif_num = choose_difficulty()
+
+    board = fill_grid(dif_num)
+    full_board = copy.deepcopy(board)
+
+    play(board, full_board)
+
+
+if __name__ == "__main__":
+    main()
